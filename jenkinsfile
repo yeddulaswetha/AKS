@@ -1,36 +1,44 @@
-pipeline{
-  agent any
-  environment {
-    BUILD_VERSION = "BID${env.BUILD_ID}__BNUM${env.BUILD_NUMBER}__GIT${env.GIT_COMMIT}"
-    MINDWAVEREGISTRY = "your-acr-name.azurecr.io"
-    MAIA_RESOURCE_NAMESPACE = "your-maia-namespace"
-    AZURE_SPCOMMON = "your-azure-service-principal-id"
-    AZURE_CONTAINER_REGISTRY_COMMON = "your-azure-container-registry-name"
-    AZURE_RG_COMMON = "your-azure-resource-group"
-    KUBERNETES_CONFIGCOMMON = "path/to/your/kubeconfig"
-  }
-  stages {
-    stage('Build stage 1') {
-      parallel {
-        stage('Build client') {
-          steps {
-            acrQuickTask(azureCredentialsId: "$env.AZURE_SPCOMMON", imageNames: [
-              [image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:v$env.BUILD_VERSION"],
-              [image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:latest"]
-            ], registryName: "$env.AZURE_CONTAINER_REGISTRY_COMMON", resourceGroupName: "$env.AZURE_RG_COMMON", timeout: 28800)
-          }
-        }
-      }
+pipeline {
+    agent any
+    
+    environment {
+        DOCKER_REGISTRY = "your-docker-registry-url" // Replace with your Docker registry URL
+        DOCKER_IMAGE_NAME = "my-web-app"
+        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
+        GITHUB_REPO = "https://github.com/your-username/your-repo.git" // Replace with your GitHub repository URL
+        AKS_CLUSTER_NAME = "your-aks-cluster-name" // Replace with your AKS cluster name
+        KUBERNETES_CONFIG = credentials('your-kubeconfig-credentials-id') // Jenkins credentials for Kubernetes config
     }
-
-    stage('Deployment stage 1') {
-      parallel {
-        stage('Deploy client') {
-          steps {
-            kubernetesDeploy(kubeConfig: [path: "$env.KUBERNETES_CONFIGCOMMON"], configs: 'scripts/staging/client.yaml')
-          }
+    
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[url: "${GITHUB_REPO}"]]])
+                    sh "docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} ."
+                }
+            }
         }
-      }
+        
+        stage('Push to Registry') {
+            steps {
+                script {
+                    sh "docker login -u your-docker-registry-username -p your-docker-registry-password ${DOCKER_REGISTRY}"
+                    sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
+                }
+            }
+        }
+        
+        stage('Deploy to AKS') {
+            steps {
+                script {
+                    // Download Kubernetes config
+                    writeFile(file: 'kubeconfig', text: KUBERNETES_CONFIG)
+                    
+                    // Deploy to AKS using deployment.yaml from GitHub repo
+                    sh "kubectl --kubeconfig=kubeconfig apply -f deployment.yaml"
+                }
+            }
+        }
     }
-  }
 }

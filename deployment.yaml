@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: my-web-app
 spec:
-  replicas: 3   # Number of desired replicas
+  replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: my-web-app
   template:
     metadata:
       labels:
-        app: nginx
+        app: my-web-app
     spec:
       containers:
-      - name: nginx
-        image: nginx:latest  
+      - name: my-web-app
+        image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
         ports:
-        - containerPort: 80  
+        - containerPort: 80

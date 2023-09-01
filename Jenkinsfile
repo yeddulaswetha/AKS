@@ -41,7 +41,7 @@ stage('Debugging') {
     steps {
         script {
             sh """
-            az login --service-principal -u a533fc9d-4729-4733-ba72-7a53f3411f4c \
+            az login --service-principal -u 77d92cb1-580e-4a67-96b9-44954361a2fd \
             -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50
             """
         }

@@ -63,7 +63,7 @@ stage('Debugging') {
             steps {
                 script {
                     
-                    sh "kubectl --kubeconfig=~/kube-config apply -f deployment.yaml"
+                    sh "kubectl --kubeconfig=/home/ubuntu/kube-config apply -f deployment.yaml"
 
                 }
             }

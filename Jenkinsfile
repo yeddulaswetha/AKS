@@ -22,10 +22,15 @@ pipeline {
       stage('Azure Login') {
     steps {
         script {
-            sh "az login --service-principal -u <your- a533fc9d-4729-4733-ba72-7a53f3411f4c -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50"
+            // Authenticate to Azure using az login
+            sh """
+            az login --service-principal -u a533fc9d-4729-4733-ba72-7a53f3411f4c \
+            -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50
+            """
         }
     }
 }
+
   
         stage('Push to ACR') {
             steps {

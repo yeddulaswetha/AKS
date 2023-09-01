@@ -7,7 +7,8 @@ pipeline {
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         GITHUB_REPO = "https://github.com/yeddulaswetha/AKS.git"
         AKS_CLUSTER_NAME = "myakscluster" 
-        KUBERNETES_CONFIG = credentials('kubeconfig') 
+        KUBERNETES_CONFIG = credentials('kube-config')
+
     }
     
     stages {
@@ -62,7 +63,8 @@ stage('Debugging') {
             steps {
                 script {
                     
-                    sh "kubectl --kubeconfig=kubeconfig apply -f deployment.yaml"
+                    sh "kubectl --kubeconfig=~/kube-config apply -f deployment.yaml"
+
                 }
             }
         }

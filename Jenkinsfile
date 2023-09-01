@@ -7,7 +7,7 @@ pipeline {
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         GITHUB_REPO = "https://github.com/yeddulaswetha/AKS.git"
         AKS_CLUSTER_NAME = "myakscluster" 
-        KUBERNETES_CONFIG = credentials('kube-config')
+        KUBERNETES_CONFIG = credentials('kubeconfig')
 
     }
     

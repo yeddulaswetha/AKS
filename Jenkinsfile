@@ -62,8 +62,6 @@ stage('Debugging') {
             steps {
                 script {
                     
-                    writeFile(file: 'kubeconfig', text: KUBERNETES_CONFIG)
-                    
                     sh "kubectl --kubeconfig=kubeconfig apply -f deployment.yaml"
                 }
             }

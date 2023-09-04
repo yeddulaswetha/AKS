@@ -24,3 +24,14 @@ spec:
         image: ${MINDWAVEREGISTRY}/${MAIA_RESOURCE_NAMESPACE}-mywebapp:v${BUILD_NUMBER}
         ports:
         - containerPort: 80
+...
+apiversion: v1
+kind: service
+metadata: 
+    name: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
+    namespace: $MAIA_RESOURCE_NAMESPACE
+spec:
+  selector: 
+    app: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
+  ports: 
+  -  port: 80

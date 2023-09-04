@@ -1,3 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+    name: MAIA_RESOURCE_NAMESPACE
+...
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -13,7 +19,7 @@ spec:
         app: my-web-app
     spec:
       containers:
-      - name: my-web-app
-        image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+      - name: MAIA_RESOURCE_NAMESPACE-mywebapp
+        image: MINDWAVEREGISTRY/MAIA_RESOURCE_NAMESPACE-mywebapp:billversion
         ports:
         - containerPort: 80

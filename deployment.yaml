@@ -1,37 +1,40 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-    name: $MAIA_RESOURCE_NAMESPACE
-...
-
+  name: $MAIA_RESOURCE_NAMESPACE
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
-  namespace: $MAIA_RESOURCE_NAMESPACE 
+  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp
+  namespace: $MAIA_RESOURCE_NAMESPACE
 spec:
-  replicas: 2
   selector:
     matchLabels:
-      app: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
+      app: phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp
   template:
     metadata:
       labels:
-        app: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
+        app: phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp
     spec:
       containers:
-      - name: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
-        image: ${MINDWAVEREGISTRY}/${MAIA_RESOURCE_NAMESPACE}-mywebapp:v${BUILD_NUMBER}
+      - name: phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp
+        image: ${MINDWAVEREGISTRY}/phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp:v${BUILD_NUMBER}
+        env:
+        - name: PORT
+          value: '80'
+        - name: HOST
+          value: 0.0.0.0
         ports:
         - containerPort: 80
-...
-apiversion: v1
-kind: service
-metadata: 
-    name: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
-    namespace: $MAIA_RESOURCE_NAMESPACE
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-webapp
+  namespace: $MAIA_RESOURCE_NAMESPACE
 spec:
-  selector: 
-    app: ${MAIA_RESOURCE_NAMESPACE}-mywebapp
-  ports: 
-  -  port: 80
+  selector:
+    app: phr-${MAIA_RESOURCE_NAMESPACE-my-webapp
+  ports:
+  - port: 80

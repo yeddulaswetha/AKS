@@ -58,6 +58,14 @@ pipeline {
             }
         }
 
+        stage('Change Kubeconfig Permissions') {
+    steps {
+        script {
+            sh "chmod +r /home/ubuntu/kube-config"
+        }
+    }
+}
+
         stage('Deploy to AKS') {
             steps {
                 script {

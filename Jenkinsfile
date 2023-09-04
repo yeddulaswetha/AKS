@@ -7,7 +7,7 @@ pipeline {
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         GITHUB_REPO = "https://github.com/yeddulaswetha/AKS.git"
         AKS_CLUSTER_NAME = "aksdeployment"
-        KUBECONFIG_PATH = "/home/ubuntu/kube-config" 
+        KUBECONFIG_PATH = "/var/lib/jenkins/workspace/kube-config" 
     }
     
     stages {
@@ -58,14 +58,7 @@ pipeline {
             }
         }
 
-        stage('Change Kubeconfig Permissions') {
-    steps {
-        script {
-            sh "chmod +r /home/ubuntu/kube-config"
-        }
-    }
-}
-
+        
         stage('Deploy to AKS') {
             steps {
                 script {

@@ -7,16 +7,17 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-web-app
+  name: MAIA_RESOURCE_NAMESPACE-mywebapp
+  namespace:MAIA_RESOURCE_NAMESPACE 
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: my-web-app
+      app: MAIA_RESOURCE_NAMESPACE-mywebapp
   template:
     metadata:
       labels:
-        app: my-web-app
+        app: MAIA_RESOURCE_NAMESPACE-mywebapp
     spec:
       containers:
       - name: MAIA_RESOURCE_NAMESPACE-mywebapp

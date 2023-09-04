@@ -1,14 +1,12 @@
 pipeline{
   agent any
-  environment {
-    BUILD_VERSION = "BID${env.BUILD_ID}__BNUM${env.BUILD_NUMBER}__GIT${env.GIT_COMMIT}"
-  }
+
   stages {
     stage('Build stage 1') {
       parallel {
         stage('Build client') {
           steps {
-            acrQuickTask(azureCredentialsId: "$env.AZURE_SPCOMMON", imageNames: [[image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:v$env.BUILD_VERSION" ], [image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:latest"]], registryName: "$env.AZURE_CONTAINER_REGISTRY_COMMON", resourceGroupName: "$env.AZURE_RG_COMMON", timeout: 28800)
+            acrQuickTask(azureCredentialsId: "$env.AZURE_SPCOMMON", imageNames: [[image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:v$env.BUILD_NUMBER" ], [image: "$env.MINDWAVEREGISTRY/$env.MAIA_RESOURCE_NAMESPACE:latest"]], registryName: "$env.AZURE_CONTAINER_REGISTRY_COMMON", resourceGroupName: "$env.AZURE_RG_COMMON", timeout: 28800)
           }
         }
 

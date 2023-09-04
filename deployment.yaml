@@ -6,20 +6,20 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service
+  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service1
   namespace: $MAIA_RESOURCE_NAMESPACE
 spec:
   selector:
     matchLabels:
-      app: phr-${MAIA_RESOURCE_NAMESPACE}-my-service
+      app: phr-${MAIA_RESOURCE_NAMESPACE}-my-service1
   template:
     metadata:
       labels:
-        app: phr-${MAIA_RESOURCE_NAMESPACE}-my-service
+        app: phr-${MAIA_RESOURCE_NAMESPACE}-my-service1
     spec:
       containers:
-      - name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service
-        image: ${MINDWAVEREGISTRY}/phr-${MAIA_RESOURCE_NAMESPACE}-my-service:v${BUILD_NUMBER}
+      - name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service1
+        image: ${MINDWAVEREGISTRY}/phr-${MAIA_RESOURCE_NAMESPACE}-my-service1:v${BUILD_NUMBER}
         env:
         - name: PORT
           value: '80'
@@ -31,10 +31,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service
+  name: phr-${MAIA_RESOURCE_NAMESPACE}-my-service1
   namespace: $MAIA_RESOURCE_NAMESPACE
 spec:
   selector:
-    app: phr-${MAIA_RESOURCE_NAMESPACE-my-service
+    app: phr-${MAIA_RESOURCE_NAMESPACE-my-service1
   ports:
   - port: 80

@@ -20,7 +20,7 @@ pipeline{
       parallel {
         stage('Deploy client') {
           steps {
-           kubernetesDeploy(kubeConfig: [path:"$KUBERNETES_CONFIGCOMMON"], configs: 'scripts/staging/client.yaml')
+           kubernetesDeploy(kubeConfig: [path:"$KUBERNETES_CONFIGCOMMON"], configs: 'deployment.yaml')
          }
        }
 

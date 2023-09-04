@@ -6,9 +6,8 @@ pipeline {
         DOCKER_IMAGE_NAME = "my-web-app"
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         GITHUB_REPO = "https://github.com/yeddulaswetha/AKS.git"
-        AKS_CLUSTER_NAME = "myakscluster" 
-        KUBERNETES_CONFIG = credentials('kubeconfig')
-
+        AKS_CLUSTER_NAME = "myakscluster"
+        KUBECONFIG_PATH = "/home/ubuntu/kube-config" 
     }
     
     stages {
@@ -20,36 +19,36 @@ pipeline {
                 }
             }
         }
-stage('Debugging') {
-    steps {
-        script {
-            echo "Service Principal ID: a533fc9d-4729-4733-ba72-7a53f3411f4c"
-            echo "Client Secret: IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf"
-            echo "Tenant ID: e28e35a1-9c39-4f76-bca7-ede584f84f50"
-        }
-    }
-}
 
-     stage('Azure Login (Interactive)') {
-    steps {
-        script {
-            sh "az login"
+        stage('Debugging') {
+            steps {
+                script {
+                    echo "Service Principal ID: a533fc9d-4729-4733-ba72-7a53f3411f4c"
+                    echo "Client Secret: IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf"
+                    echo "Tenant ID: e28e35a1-9c39-4f76-bca7-ede584f84f50"
+                }
+            }
         }
-    }
-}
+
+        stage('Azure Login (Interactive)') {
+            steps {
+                script {
+                    sh "az login"
+                }
+            }
+        }
 
         stage('Azure Login') {
-    steps {
-        script {
-            sh """
-            az login --service-principal -u 77d92cb1-580e-4a67-96b9-44954361a2fd \
-            -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50
-            """
+            steps {
+                script {
+                    sh """
+                    az login --service-principal -u 77d92cb1-580e-4a67-96b9-44954361a2fd \
+                    -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50
+                    """
+                }
+            }
         }
-    }
-}
 
-  
         stage('Push to ACR') {
             steps {
                 script {
@@ -58,13 +57,11 @@ stage('Debugging') {
                 }
             }
         }
-        
+
         stage('Deploy to AKS') {
             steps {
                 script {
-                    
-                    sh "kubectl --kubeconfig=/home/ubuntu/kube-config apply -f deployment.yaml"
-
+                    sh "kubectl --kubeconfig=${KUBECONFIG_PATH} apply -f deployment.yaml"
                 }
             }
         }

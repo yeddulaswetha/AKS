@@ -1,15 +1,18 @@
+@Library('my-shared-library') _
+
 pipeline {
     agent any
-    
+
     environment {
-        ACR_NAME = "myegistry" 
-        DOCKER_IMAGE_NAME = "my-web-app"
-        DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
-        GITHUB_REPO = "https://github.com/yeddulaswetha/AKS.git"
-        AKS_CLUSTER_NAME = "aksdeployment"
-        KUBECONFIG_PATH = "/var/lib/jenkins/workspace/kube-config" 
+        def envVars = mySharedLibrary.environment.setEnvironmentVariables()
+        ACR_NAME = envVars.ACR_NAME
+        DOCKER_IMAGE_NAME = envVars.DOCKER_IMAGE_NAME
+        DOCKER_IMAGE_TAG = envVars.DOCKER_IMAGE_TAG
+        GITHUB_REPO = envVars.GITHUB_REPO
+        AKS_CLUSTER_NAME = envVars.AKS_CLUSTER_NAME
+        KUBECONFIG_PATH = envVars.KUBECONFIG_PATH
     }
-    
+
     stages {
         stage('Build') {
             steps {
@@ -23,9 +26,7 @@ pipeline {
         stage('Debugging') {
             steps {
                 script {
-                    echo "Service Principal ID: a533fc9d-4729-4733-ba72-7a53f3411f4c"
-                    echo "Client Secret: IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf"
-                    echo "Tenant ID: e28e35a1-9c39-4f76-bca7-ede584f84f50"
+                    mySharedLibrary.debugging.debug()
                 }
             }
         }
@@ -33,7 +34,7 @@ pipeline {
         stage('Azure Login (Interactive)') {
             steps {
                 script {
-                    sh "az login"
+                    mySharedLibrary.azureLoginInteractive()
                 }
             }
         }
@@ -41,10 +42,10 @@ pipeline {
         stage('Azure Login') {
             steps {
                 script {
-                    sh """
-                    az login --service-principal -u 77d92cb1-580e-4a67-96b9-44954361a2fd \
-                    -p IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf --tenant e28e35a1-9c39-4f76-bca7-ede584f84f50
-                    """
+                    def servicePrincipalId = "77d92cb1-580e-4a67-96b9-44954361a2fd"
+                    def clientSecret = "IUQ8Q~mcskURjDXYMeGb9Qg6RRHB_F1qmUnrpbWf"
+                    def tenantId = "e28e35a1-9c39-4f76-bca7-ede584f84f50"
+                    mySharedLibrary.azureLogin(servicePrincipalId, clientSecret, tenantId)
                 }
             }
         }
@@ -58,7 +59,6 @@ pipeline {
             }
         }
 
-        
         stage('Deploy to AKS') {
             steps {
                 script {

@@ -20,6 +20,6 @@ spec:
     spec:
       containers:
       - name: MAIA_RESOURCE_NAMESPACE-mywebapp
-        image: MINDWAVEREGISTRY/MAIA_RESOURCE_NAMESPACE-mywebapp:billversion
+        image: MINDWAVEREGISTRY/MAIA_RESOURCE_NAMESPACE-mywebapp:v${BUILD_NUMBER}
         ports:
         - containerPort: 80

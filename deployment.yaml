@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: my-namespace
+  name: sample
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: my-namespace-my-service1 
-  namespace: my-namespace 
+  name: sample-my-service1 
+  namespace: sample
 spec:
   selector:
     matchLabels:
-      app: my-namespace-my-service1
+      app: sample-my-service1
   template:
     metadata:
       labels:
-        app: my-namespace-my-service1
+        app: sample-my-service1
     spec:
       containers:
-      - name: my-namespace-my-service1
-        image: aksdeployment.azurecr.io/my-namespace-my-service1:latest
+      - name: sample-my-service1
+        image: aksdeployment.azurecr.io/sample-my-service1:latest
         env:
         - name: PORT
           value: '80'
@@ -31,10 +31,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-namespace-my-service1 
-  namespace: my-namespace 
+  name: sample-my-service1 
+  namespace: sample 
 spec:
   selector:
-    app: my-namespace-my-service1
+    app: sample-my-service1
   ports:
   - port: 80

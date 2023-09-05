@@ -1,25 +1,25 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: $MAIA_RESOURCE_NAMESPACE
+  name: my-namespace # Replace with your desired namespace name
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${MAIA_RESOURCE_NAMESPACE}-my-service1
-  namespace: $MAIA_RESOURCE_NAMESPACE
+  name: my-namespace-my-service1 # Provide a proper name for your deployment
+  namespace: my-namespace # Use the namespace name defined above
 spec:
   selector:
     matchLabels:
-      app: ${MAIA_RESOURCE_NAMESPACE}-my-service1
+      app: my-namespace-my-service1
   template:
     metadata:
       labels:
-        app: ${MAIA_RESOURCE_NAMESPACE}-my-service1
+        app: my-namespace-my-service1
     spec:
       containers:
-      - name: ${MAIA_RESOURCE_NAMESPACE}-my-service1
-        image: ${MINDWAVEREGISTRY}/phr-${MAIA_RESOURCE_NAMESPACE}-my-service1:v${BUILD_NUMBER}
+      - name: my-namespace-my-service1
+        image: myregistry.azurecr.io/phr-my-namespace-my-service1:v9 # Replace with your image details
         env:
         - name: PORT
           value: '80'
@@ -31,10 +31,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${MAIA_RESOURCE_NAMESPACE}-my-service1
-  namespace: $MAIA_RESOURCE_NAMESPACE
+  name: my-namespace-my-service1 # Provide a proper name for your service
+  namespace: my-namespace # Use the namespace name defined above
 spec:
   selector:
-    app: ${MAIA_RESOURCE_NAMESPACE-my-service1
+    app: my-namespace-my-service1
   ports:
   - port: 80

@@ -23,8 +23,6 @@ spec:
         env:
         - name: PORT
           value: '80'
-        - name: HOST
-          value: 0.0.0.0
         ports:
         - containerPort: 80
 ---

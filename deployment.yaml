@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: my-namespace-my-service1
-        image: myegistry.azurecr.io/my-namespace-my-service1:latest
+        image: aksdeployment.azurecr.io/my-namespace-my-service1:latest
         env:
         - name: PORT
           value: '80'
